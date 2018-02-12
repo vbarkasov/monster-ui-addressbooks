@@ -1,0 +1,46 @@
+<h2>{{i18n.addressbooks.entriesTitle}}</h2>
+
+<table id="entries-table" class="entries-table">
+	<thead>
+		<tr>
+			<th class="etable_index-col">№</th>
+			<th>{{i18n.addressbooks.entriesTable.columnHeader.name}}</th>
+			<th>{{i18n.addressbooks.entriesTable.columnHeader.firstName}}</th>
+			<th>{{i18n.addressbooks.entriesTable.columnHeader.lastName}}</th>
+			<th>{{i18n.addressbooks.entriesTable.columnHeader.number}}</th>
+			<th>{{i18n.addressbooks.entriesTable.columnHeader.type}}</th>
+			<th>{{i18n.addressbooks.entriesTable.columnHeader.pattern}}</th>
+			<th class="etable_actions-col no-sort">
+				{{i18n.addressbooks.entriesTable.columnHeader.actions}}
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+	{{#each this.entries}}
+		<tr class="js-item" id="{{id}}">
+			<td class="etable_index-col">{{inc @index}}</td>
+
+			<td class="js-entry-name">{{ value.displayname }}</td>
+			<td class="js-entry-name">{{ value.firstname }}</td>
+			<td class="js-entry-name">{{ value.lastname }}</td>
+			<td class="js-entry-name">{{ value.number }}</td>
+			<td class="js-entry-name">{{ value.type }}</td>
+			<td class="js-entry-name">{{ value.pattern }}</td>
+
+			<td class="etable_actions-col">
+				<div class="buttons-wrapper">
+					<a class="link-icon js-remove-entry" data-entry-id="{{id}}"
+					   data-list-id="{{@root.listId}}" title="{{i18n.addressbooks.entriesTable.editBtnText}}">
+						<i class="fa fa-trash-o"></i>
+					</a>
+
+					<a class="link-icon js-edit-entry" data-entry-id="{{id}}"
+					   data-list-id="{{@root.listId}}" title="{{i18n.addressbooks.entriesTable.editBtnText}}">
+						<i class="fa fa-pencil-square-o"></i>
+					</a>
+				</div>
+			</td>
+		</tr>
+	{{/each}}
+	</tbody>
+</table>

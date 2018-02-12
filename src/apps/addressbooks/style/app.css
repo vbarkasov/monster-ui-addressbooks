@@ -1,0 +1,295 @@
+@import url('../../../css/vendor/jquery/jquery.dataTables.css');
+
+.addressbooks-container h1 {
+	font-size: 25px;
+	font-weight: normal;
+}
+
+.addressbooks-container h2 {
+	font-size: 20px;
+	font-weight: normal;
+}
+
+.addressbooks-container .addressbooks-content {
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.addressbooks-container .link-icon {
+	font-size: 24px;
+	margin-right: 15px;
+	cursor: pointer;
+}
+
+.addressbooks-container .link-icon .fa {
+	color: #464646;
+}
+
+.addressbooks-container .link-icon .fa:hover,
+.addressbooks-container .link-icon .fa:active {
+	color: #22A5FF;
+}
+
+/*
+ * Sidebar
+ */
+.addressbooks-container .sidebar-list-panel {
+}
+
+.addressbooks-container .sidebar-list-panel.well {
+	padding: 0 0 17px;
+	border-radius: 0 0 4px 0;
+}
+
+.addressbooks-container .sidebar-list-panel ul li {
+	line-height: 30px;
+}
+
+.addressbooks-container .sidebar-list-panel ul li a {
+	font-size: 15px;
+	line-height: 18px;
+	padding: 11px 15px;
+}
+
+.addressbooks-container .sidebar-list-panel__header {
+	font-size: 17px;
+	font-weight: normal;
+	padding-left: 14px;
+	position: relative;
+}
+
+.addressbooks-container .sidebar-list-panel__header .btn {
+	position: absolute;
+	top: 0;
+	right: 10px;
+}
+
+/*
+ * List Item Form
+ */
+.addressbooks-container .form-vertical .control-group {
+	display: inline-block;
+	vertical-align: top;
+	width: 273px;
+	margin-bottom: 3px;
+}
+
+.addressbooks-container .form-vertical .control-label {
+	line-height: 1;
+	margin-bottom: 4px;
+	font-size: 14px;
+}
+
+.addressbooks-container .form-vertical .controls input[type="text"] {
+	width: 240px;
+}
+
+/*
+ * Entries
+ */
+.addressbooks-container .entries-container {
+	max-width: 800px;
+	font-size: 16px;
+	margin-bottom: 20px;
+}
+
+.addressbooks-container .entries-container .dataTables_length,
+.addressbooks-container .entries-container .dataTables_filter {
+	margin-bottom: 10px;
+}
+
+.addressbooks-container .btn-round {
+	padding: 7px 7px 5px 7px;
+	border-radius: 30px;
+	line-height: 1;
+}
+
+.addressbooks-container .sidebar-list-panel__header > .btn-round {
+	margin-left: 10px;
+	padding: 3px 3px 2px 3px;
+}
+
+.addressbooks-container .buttons-wrapper {
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.addressbooks-container .buttons-wrapper .btn {
+	margin-right: 10px;
+}
+
+.addressbooks-container .entries-container table {
+	background: white;
+	margin-bottom: 10px;
+	border-bottom: 1px solid #AFAFAF;
+}
+
+.addressbooks-container .entries-container table th,
+.addressbooks-container .entries-container table td {
+	line-height: 1;
+	padding: 8px;
+}
+
+.addressbooks-container .entries-container table th {
+	text-align: left;
+	border-bottom: 1px solid #AFAFAF;
+}
+
+.addressbooks-container .entries-container table td {
+	padding-left: 8px;
+	padding-right: 8px;
+}
+
+.addressbooks-container .entries-container table thead tr {
+	background: #e8e8e8;
+}
+
+.addressbooks-container .entries-container table tbody tr:nth-child(even) {
+	background-color: #eee;
+}
+
+.addressbooks-container .entries-container tfoot tr.footable-paging {
+	background: #f5f5f5;
+}
+
+.addressbooks-container .entries-container tfoot tr.footable-paging td {
+	border: none;
+}
+
+.addressbooks-container .entries-container table .footable-paging .label {
+	background: #f5f5f5;
+	color: #848484;
+	text-shadow: none;
+	font-weight: normal;
+}
+
+.addressbooks-container .entries-container table td .btn-wrapper {
+	padding-top: 5px;
+	text-align: center;
+}
+
+.addressbooks-container .entries-container .entries-table .buttons-wrapper .btn {
+	margin-right: 5px;
+	margin-bottom: 5px;
+	padding: 6px 8px;
+	white-space: nowrap;
+	font-size: 20px;
+}
+
+.addressbooks-container .entries-container .etable_index-col {
+	width: 30px;
+}
+
+.addressbooks-container .entries-container .etable_actions-col {
+	width: 100px;
+}
+
+.addressbooks-container .dataTables_wrapper .dataTables_filter input {
+	font-size: 18px;
+}
+
+.addressbooks-container .dataTables_wrapper .dt-buttons {
+	padding: 0 21px 0;
+}
+
+.addressbooks-container .dataTables_paginate .pagination {
+	margin: 0;
+}
+
+.addressbooks-container .dataTables_wrapper .dataTables_paginate .paginate_button {
+	background: white;
+	border-color: #DEDEDE;
+	padding: 8px 14px;
+}
+
+.addressbooks-container .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+	background: white;
+	border-color: #22A5FF;
+	padding: 8px 14px;
+}
+
+.addressbooks-container .dataTables_wrapper .dataTables_paginate .paginate_button.disabled,
+.addressbooks-container .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover {
+	border-color: #DEDEDE;
+	background-color: #F0F0F9;
+}
+
+.addressbooks-container .dataTables_wrapper .dataTables_paginate .paginate_button.disabled a {
+	color: #333333;
+	cursor: default;
+}
+
+.addressbooks-container .dataTables_wrapper .dataTables_paginate .paginate_button.active,
+.addressbooks-container .dataTables_wrapper .dataTables_paginate .paginate_button.active:hover {
+	background: transparent;
+	border-color: #DEDEDE;
+	cursor: default;
+}
+
+.addressbooks-container .dataTables_wrapper .dataTables_paginate .paginate_button.active a {
+	color: #333333;
+	cursor: default;
+}
+
+.addressbooks-container .dataTables_wrapper .dataTables_info {
+	padding-top: 4px;
+}
+
+.addressbooks-container table.dataTable thead .sorting {
+	background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAN9JREFUeNpi/P//PwO1ABMxilasWMFJFcOABrEBqQNAWogaLisCYjMgbiGkkBFfmAFdIw2kbgAxDxD/BWKTiIiIC+S6rBpqEAgwA/FkslwGdJUBkDoDNQQZRANdt4xUl03GYhAItEMjhTjDgIqjgJQNDkvkGBkZi0iOAFIBCw6XVYC8g0cf1nDDFWZ9QPwIh9wRkiIAqPgXkKrEIgVKa7kkpzOo7UfQhGdRkmhzoa4BgS9A3Ep23oS6YhaU2wrkPyU5NtFADRAbA9NWH0GVoHRGCC9fvpyTGHVUTbQAAQYAw9p73eOEjMsAAAAASUVORK5CYII=');
+}
+.addressbooks-container table.dataTable thead .sorting_asc {
+	background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAIZJREFUeNpi/P//PwO1ABMxilSXMXBSxTCgQWxA6gCQFqKGy4qA2AyIWwgpZMQXZkDXSAOpG0DMA8R/gdjkdhTDBXJdVg01CASYgXgyWS4DusoASJ2BGoIMooGuW0aqyyZjMQgE2qGRQpxhQMVRQMoGhyVy0EghLQJokmhHDRs1bDAZBhBgAHKqHoGZIGgDAAAAAElFTkSuQmCC');
+}
+.addressbooks-container table.dataTable thead .sorting_desc {
+	background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAIZJREFUeNpi/P//PwO1ABMDFcGoYaOG0cMwFmyCqssYKoBUOx590bejGJYR67I+IH6EQ+4INoNwGgZU/AtIVWKR+gvEuSSHGdT2I2jCs4DiF8iNgFyoa0DgCxC3kh2bUFfMgnJbgfynJMcmGqgBYmNopOAHoMKREFZZ+p+TGHWM1CxpAQIMAOGPWHkp/4GhAAAAAElFTkSuQmCC');
+}
+.addressbooks-container table.dataTable thead .sorting_asc_disabled {
+	background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAIhJREFUeNpi/P//PwO1ABMxilasWMFJFcOABrEBqQNAWogaLisCYjMgbiGkkBFfmAFdIw2kbgAxDxD/BWKTiIiIC+S6rBpqEAgwA/FkslwGdJUBkDoDNQQZRANdt4xUl03GYhAItEMjhTjDgIqjgJQNDkvkGBkZi0iOAJok2lHDRg0bTIYBBBgAXmcmZf5xFh8AAAAASUVORK5CYII=');
+}
+.addressbooks-container table.dataTable thead .sorting_desc_disabled {
+	background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAIhJREFUeNpi/P//PwO1ABMDFcGoYaOG0cMwFmyCK1asqABS7Xj0RUdERCwj1mV9QPwIh9wRbAbhNAyo+BeQqsQi9ReIc0kOM6jtR9CEZwHFL5AbAblQ14DAFyBuJTs2oa6YBeW2AvlPSY5NNFADxMaMjIx9BFWCCkdCePny5ZzEqGOkZkkLEGAA5p9Ym9BPvZAAAAAASUVORK5CYII=');
+}
+
+.addressbooks-container table.dataTable thead th,
+.addressbooks-container table.dataTable thead td {
+	border: none;
+}
+
+.addressbooks-container table .buttons-wrapper {
+	padding-top: 0;
+	padding-bottom: 0;
+}
+
+.addressbooks-container table .dataTables_length select {
+	width: 60px;
+}
+
+/*
+ * Dialog
+ */
+.addressbooks-dialog .ui-dialog-content {
+	max-width: 800px;
+	padding: 30px;
+}
+
+.addressbooks-dialog .buttons-wrapper {
+	text-align: center;
+}
+
+.addressbooks-dialog form {
+	margin-bottom: 0;
+}
+
+.addressbooks-dialog .form-horizontal .control-label {
+	width: 120px;
+}
+
+.addressbooks-dialog .form-horizontal .controls {
+	margin-left: 138px;
+}
+
+.addressbooks-dialog .form-horizontal .control-group {
+	padding-right: 20px;
+}
+

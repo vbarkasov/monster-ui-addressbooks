@@ -1,0 +1,76 @@
+<form id="addressbook-entry-form" class="form-horizontal addressbook-entry-form">
+	<div class="control-group">
+		<label class="control-label" for="entry-displayname">
+			{{ i18n.addressbooks.entryForm.displaynameLabel }}
+		</label>
+		<div class="controls">
+			<input class="js-to-serialize" type="text" maxlength="128" value="{{ entryData.displayname }}"
+				name="displayname" id="entry-displayname"/>
+		</div>
+	</div>
+
+	<div class="control-group">
+		<label class="control-label" for="entry-firstname">
+			{{ i18n.addressbooks.entryForm.firstnameLabel }}
+		</label>
+		<div class="controls">
+			<input class="js-to-serialize" type="text" maxlength="128" value="{{ entryData.firstname }}"
+				name="firstname" id="entry-firstname" />
+		</div>
+	</div>
+
+	<div class="control-group">
+		<label class="control-label" for="entry-lastname">
+			{{ i18n.addressbooks.entryForm.lastnameLabel }}
+		</label>
+		<div class="controls">
+			<input class="js-to-serialize" type="text" maxlength="128" value="{{ entryData.lastname }}"
+				name="lastname" id="entry-lastname" />
+		</div>
+	</div>
+
+	<div class="control-group">
+		<label class="control-label" for="entry-number">
+			{{ i18n.addressbooks.entryForm.numberLabel }}
+		</label>
+		<div class="controls">
+			<input class="js-to-serialize" type="text" value="{{ entryData.number }}"
+				name="number" id="entry-number" />
+		</div>
+	</div>
+
+	<div class="control-group">
+		<label class="control-label" for="entry-pattern">
+			{{ i18n.addressbooks.entryForm.patternLabel }}
+		</label>
+		<div class="controls">
+			<input class="js-to-serialize" type="text" value="{{ entryData.pattern }}"
+				name="pattern" id="entry-pattern" />
+		</div>
+	</div>
+
+	<div class="control-group">
+		<label class="control-label" for="entry-type">
+			{{ i18n.addressbooks.entryForm.typeLabel }}
+		</label>
+		<div class="controls">
+			<input class="js-to-serialize" type="text" minlength="1" maxlength="128" value="{{ entryData.type }}"
+				name="type" id="entry-type" />
+		</div>
+	</div>
+
+	<div class="buttons-wrapper">
+		{{#if entryData.id}}
+			<button class="btn btn-primary js-save-entry" data-entry-id="{{ entryData.id }}" data-list-id="{{ listId }}">
+				{{ i18n.addressbooks.entryForm.saveBtnText }}
+			</button>
+			<button class="btn js-cancel">
+				{{ i18n.addressbooks.entryForm.cancelBtnText }}
+			</button>
+		{{else}}
+			<button class="btn btn-primary js-save-entry" data-entry-id="{{ entryData.id }}" data-list-id="{{ listId }}">
+				{{ i18n.addressbooks.entryForm.saveBtnText }}
+			</button>
+		{{/if}}
+	</div>
+</form>

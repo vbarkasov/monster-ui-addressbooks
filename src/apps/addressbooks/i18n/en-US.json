@@ -1,0 +1,39 @@
+{
+	"addressbooks": {
+		"sidebar": {
+			"title": "Address Books"
+		},
+		"editListTitle": "Edit Address Book List",
+		"createListTitle": "Create Address Book List",
+		"listItemNameLabel": "Name",
+		"listItemDescriptionLabel": "Description",
+		"listItemOrgLabel": "Organization",
+		"saveListItemButtonText": "Save",
+		"deleteListItemButtonText": "Delete",
+		"createListItemButtonText": "Create",
+		"entriesTitle": "Entries",
+		"entriesTable": {
+			"columnHeader": {
+				"name": "Display name",
+				"firstName": "Firstname",
+				"lastName": "Lastname",
+				"number": "Phone Number",
+				"type": "Type",
+				"pattern": "Match pattern",
+				"actions": "Actions"
+			},
+			"editBtnText": "Edit",
+			"deleteBtnText": "Delete"
+		},
+		"entryForm": {
+			"displaynameLabel": "Display Name",
+			"firstnameLabel": "Firstname",
+			"lastnameLabel": "Lastname",
+			"numberLabel": "Phone Number",
+			"patternLabel": "Match pattern",
+			"typeLabel": "Type",
+			"saveBtnText": "Save",
+			"cancelBtnText": "Cancel"
+		}
+	}
+}

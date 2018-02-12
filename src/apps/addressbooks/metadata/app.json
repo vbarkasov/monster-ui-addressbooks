@@ -1,0 +1,29 @@
+{
+	"name": "addressbooks",
+	"i18n": {
+		"en-US": {
+			"label": "Address Books",
+			"description": "The Address Books App allows you manage your entries.",
+			"extended_description": "The Address Books App allows you manage your entries.",
+			"features": [
+				"Manage Address Books",
+				"Manage Entries"
+			]
+		}
+	},
+	"tags": [],
+	"icon": "addressbooks_app.png",
+	"api_url": "",
+	"author": "Telux",
+	"version": "1.0",
+	"license": "-",
+	"price": 0,
+	"screenshots": [
+		"screen001.png"
+	],
+	"urls": {
+		"documentation": "{documentation_url}",
+		"howto": "{howto_video_url}"
+	},
+	"pvt_type": "app"
+}

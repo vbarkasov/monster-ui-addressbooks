@@ -1,0 +1,48 @@
+{{#if data.id}}
+	<h1>{{ i18n.addressbooks.editListTitle }}</h1>
+{{else}}
+	<h1>{{ i18n.addressbooks.createListTitle }}</h1>
+{{/if}}
+
+<form id="addressbook-list-form" class="form-vertical">
+	<div class="control-group">
+		<label class="control-label" for="list-item-name">{{ @root.i18n.addressbooks.listItemNameLabel }}</label>
+		<div class="controls">
+			<input class="js-to-serialize" type="text" value="{{ data.name }}" name="name" id="list-item-name" />
+		</div>
+	</div>
+
+	<div class="control-group">
+		<label class="control-label" for="list-item-description">
+			{{ i18n.addressbooks.listItemDescriptionLabel }}
+		</label>
+		<div class="controls">
+			<input class="js-to-serialize" type="text" value="{{ data.description }}" name="description"
+				id="list-item-description" />
+		</div>
+	</div>
+
+	<div class="control-group">
+		<label class="control-label" for="list-item-org">{{ @root.i18n.addressbooks.listItemOrgLabel }}</label>
+		<div class="controls">
+			<input class="js-to-serialize" type="text" value="{{ data.org }}" name="org" id="list-item-org" />
+		</div>
+	</div>
+
+	<div id="entries-container" class="entries-container"></div>
+
+	<div class="buttons-wrapper">
+		{{#if data.id}}
+			<button class="btn btn-primary js-save-list" data-list-id="{{ data.id }}">
+				{{ i18n.addressbooks.saveListItemButtonText }}
+			</button>
+			<button class="btn btn-danger js-delete-list" data-list-id="{{ data.id }}">
+				{{ i18n.addressbooks.deleteListItemButtonText }}
+			</button>
+		{{else}}
+			<button class="btn btn-primary js-save-entry">
+				{{ i18n.addressbooks.createListItemButtonText }}
+			</button>
+		{{/if}}
+	</div>
+</form>

@@ -1,5 +1,14 @@
 <h2>{{i18n.addressbooks.entriesTitle}}</h2>
 
+<a class="btn btn-round btn-primary create-entry-btn js-create-entry" href="" data-list-id="{{listId}}"
+	title="{{i18n.addressbooks.addEntryBtnText}}">
+	<i class="fa fa-plus"></i>
+</a>
+
+<a class="btn js-import-csv" href="" data-list-id="{{listId}}" title="{{i18n.addressbooks.importCSVbtnText}}">
+	Import CSV
+</a>
+
 <table id="entries-table" class="entries-table">
 	<thead>
 		<tr>
@@ -17,7 +26,7 @@
 	</thead>
 	<tbody>
 	{{#each this.entries}}
-		<tr class="js-item" id="{{id}}">
+		<tr class="js-item" id="{{id}}" data-entry-id="{{id}}" data-list-id="{{@root.listId}}">
 			<td class="etable_index-col">{{inc @index}}</td>
 
 			<td class="js-entry-name">{{ value.displayname }}</td>
@@ -28,17 +37,7 @@
 			<td class="js-entry-name">{{ value.pattern }}</td>
 
 			<td class="etable_actions-col">
-				<div class="buttons-wrapper">
-					<a class="link-icon js-remove-entry" data-entry-id="{{id}}"
-					   data-list-id="{{@root.listId}}" title="{{i18n.addressbooks.entriesTable.editBtnText}}">
-						<i class="fa fa-trash-o"></i>
-					</a>
-
-					<a class="link-icon js-edit-entry" data-entry-id="{{id}}"
-					   data-list-id="{{@root.listId}}" title="{{i18n.addressbooks.entriesTable.editBtnText}}">
-						<i class="fa fa-pencil-square-o"></i>
-					</a>
-				</div>
+				{{{ @root.entriesButtons }}}
 			</td>
 		</tr>
 	{{/each}}

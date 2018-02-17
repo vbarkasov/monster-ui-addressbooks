@@ -8,6 +8,7 @@
 .addressbooks-container h2 {
 	font-size: 20px;
 	font-weight: normal;
+	display: inline-block;
 }
 
 .addressbooks-container .addressbooks-content {
@@ -30,6 +31,18 @@
 	color: #22A5FF;
 }
 
+/*.addressbooks-container .link-icon.link-icon-danger:hover .fa {
+	color: #ff230f;
+}*/
+
+.addressbooks-container .btn-round {
+	border-radius: 30px;
+	line-height: 1;
+	width: 21px;
+	box-sizing: border-box;
+	padding: 3px 3px 2px 3px;
+}
+
 /*
  * Sidebar
  */
@@ -39,6 +52,7 @@
 .addressbooks-container .sidebar-list-panel.well {
 	padding: 0 0 17px;
 	border-radius: 0 0 4px 0;
+	max-width: 210px;
 }
 
 .addressbooks-container .sidebar-list-panel ul li {
@@ -49,6 +63,9 @@
 	font-size: 15px;
 	line-height: 18px;
 	padding: 11px 15px;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
 }
 
 .addressbooks-container .sidebar-list-panel__header {
@@ -84,6 +101,12 @@
 	width: 240px;
 }
 
+.addressbooks-container .form-vertical .controls label.monster-invalid {
+	position: static;
+	font-size: 14px;
+	margin-bottom: 8px;
+}
+
 /*
  * Entries
  */
@@ -98,15 +121,14 @@
 	margin-bottom: 10px;
 }
 
-.addressbooks-container .btn-round {
-	padding: 7px 7px 5px 7px;
-	border-radius: 30px;
-	line-height: 1;
+.addressbooks-container .entries-container .create-entry-btn {
+	margin-left: 5px;
+	vertical-align: baseline;
 }
 
 .addressbooks-container .sidebar-list-panel__header > .btn-round {
 	margin-left: 10px;
-	padding: 3px 3px 2px 3px;
+	padding: 3px 2px 2px 3px;
 }
 
 .addressbooks-container .buttons-wrapper {
@@ -291,5 +313,19 @@
 
 .addressbooks-dialog .form-horizontal .control-group {
 	padding-right: 20px;
+}
+
+.addressbooks-container .monster-radio + .monster-radio {
+	margin-left: 15px;
+}
+
+@media (max-width: 767px) {
+	.addressbooks-container .sidebar-list-panel.well {
+		max-width: none;
+	}
+
+	.addressbooks-container .sidebar-list-panel__header > .btn-round {
+		position: static;
+	}
 }
 

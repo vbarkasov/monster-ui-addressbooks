@@ -33,15 +33,18 @@
 
 	<div class="buttons-wrapper">
 		{{#if data.id}}
-			<button class="btn btn-primary js-save-list" data-list-id="{{ data.id }}">
+			<button class="btn btn-primary js-save-list" data-list-id="{{ data.id }}" style="display: none;">
 				{{ i18n.addressbooks.saveListItemButtonText }}
 			</button>
 			<button class="btn btn-danger js-delete-list" data-list-id="{{ data.id }}">
 				{{ i18n.addressbooks.deleteListItemButtonText }}
 			</button>
 		{{else}}
-			<button class="btn btn-primary js-save-entry">
+			<button class="btn btn-primary js-create-list">
 				{{ i18n.addressbooks.createListItemButtonText }}
+			</button>
+			<button class="btn btn-primary js-cancel-creating-list">
+				{{ i18n.addressbooks.cancelCreatingListItemButtonText }}
 			</button>
 		{{/if}}
 	</div>

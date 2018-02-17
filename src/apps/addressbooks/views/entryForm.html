@@ -30,32 +30,44 @@
 	</div>
 
 	<div class="control-group">
-		<label class="control-label" for="entry-number">
-			{{ i18n.addressbooks.entryForm.numberLabel }}
-		</label>
-		<div class="controls">
-			<input class="js-to-serialize" type="text" value="{{ entryData.number }}"
-				name="number" id="entry-number" />
-		</div>
-	</div>
-
-	<div class="control-group">
-		<label class="control-label" for="entry-pattern">
-			{{ i18n.addressbooks.entryForm.patternLabel }}
-		</label>
-		<div class="controls">
-			<input class="js-to-serialize" type="text" value="{{ entryData.pattern }}"
-				name="pattern" id="entry-pattern" />
-		</div>
-	</div>
-
-	<div class="control-group">
 		<label class="control-label" for="entry-type">
 			{{ i18n.addressbooks.entryForm.typeLabel }}
 		</label>
 		<div class="controls">
 			<input class="js-to-serialize" type="text" minlength="1" maxlength="128" value="{{ entryData.type }}"
 				name="type" id="entry-type" />
+		</div>
+	</div>
+
+	<div class="control-group">
+		<span class="control-label"></span>
+		<div class="controls">
+			{{#monsterRadio i18n.addressbooks.entryForm.numberRadioLabel }}
+				<input type="radio" class="js-number-switcher" name="entry-number-switcher" value="number" checked>
+			{{/monsterRadio}}
+			{{#monsterRadio i18n.addressbooks.entryForm.patternRadioLabel }}
+				<input type="radio" class="js-number-switcher" name="entry-number-switcher" value="pattern">
+			{{/monsterRadio}}
+		</div>
+	</div>
+
+	<div class="control-group js-entry-number-box">
+		<label class="control-label" for="entry-number">
+			{{ i18n.addressbooks.entryForm.numberLabel }}
+		</label>
+		<div class="controls">
+			<input class="js-to-serialize" type="text" value="{{ entryData.number }}"
+				   name="number" id="entry-number" />
+		</div>
+	</div>
+
+	<div class="control-group js-entry-pattern-box" style="display: none;">
+		<label class="control-label" for="entry-pattern">
+			{{ i18n.addressbooks.entryForm.patternLabel }}
+		</label>
+		<div class="controls">
+			<input class="js-to-serialize" type="text" value="{{ entryData.pattern }}"
+				   name="pattern" id="entry-pattern" />
 		</div>
 	</div>
 

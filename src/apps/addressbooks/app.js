@@ -106,6 +106,22 @@ define(function(require){
 					minlength: 1,
 					maxlength: 128
 				}
+			},
+			'listForm': {
+				'name': {
+					required: true,
+					minlength: 1,
+					maxlength: 128
+				},
+				'description': {
+					required: true,
+					minlength: 1,
+					maxlength: 128
+				},
+				'org': {
+					minlength: 1,
+					maxlength: 128
+				}
 			}
 		},
 
@@ -176,18 +192,36 @@ define(function(require){
 		},
 
 		render: function($container){
-			var self = this,
-				$container = $container || $('#monster_content');
+			var self = this;
+			$container = $container || $('#monster_content');
 
 			var html = $(monster.template(self, 'main', {}));
 			$container.empty().append(html);
 
-			self.getAddressBooksList(function(addressBooksList) {
-				self.renderSidebarMenu($container, addressBooksList);
+			self.getLists(function(addressBooksList) {
+				self.renderSidebarMenu(addressBooksList);
+			});
+
+			self.mainContainerBindEvents($container);
+		},
+
+		mainContainerBindEvents: function ($container) {
+			var self = this;
+
+			$container.find('.js-new-list').on('click', function(e) {
+				e.preventDefault();
+
+				self.renderListItemForm(null, function() {
+					var $menuListContainer = $('#addressbooks-list');
+					$menuListContainer.find('li.active').removeClass('active');
+					$menuListContainer.find('.js-new-list-item').remove();
+					$menuListContainer.prepend('<li class="js-new-list-item active"><a>' +
+						self.i18n.active().addressbooks.sidebar.menuNewListItemText +'</a></li>');
+				});
 			});
 		},
 
-		getAddressBooksList: function(callback){
+		getLists: function(callback){
 			var self = this;
 
 			monster.request({
@@ -204,7 +238,7 @@ define(function(require){
 			});
 		},
 
-		getAddressBooksListItem: function(listId, callback){
+		getListItem: function(listId, callback){
 			var self = this;
 
 			monster.request({
@@ -259,7 +293,7 @@ define(function(require){
 			});
 		},
 
-		createAddressBooksList: function(data, callback){
+		createList: function(data, callback){
 			var self = this;
 
 			monster.request({
@@ -296,8 +330,23 @@ define(function(require){
 			});
 		},
 
-		saveEntry: function(){
+		updateList: function(listId, data, callback){
+			var self = this;
 
+			monster.request({
+				resource: 'addressbooks.list.updateWithRewrite',
+				data: {
+					accountId: self.accountId,
+					listId: listId,
+					generateError: false,
+					data: data
+				},
+				success: function (data) {
+					if(typeof(callback) === 'function') {
+						callback(data.data);
+					}
+				}
+			});
 		},
 
 		updateEntry: function(entryId, listId, data, callback){
@@ -320,10 +369,10 @@ define(function(require){
 			});
 		},
 
-		renderSidebarMenu: function($container, addressBooksList, selectedId){
+		renderSidebarMenu: function(addressBooksList, selectedId){
 			var self = this;
 
-			var $addressBooksListBox = $container.find('#addressbooks-list-container');
+			var $addressBooksListBox = $('#addressbooks-list-container');
 
 			addressBooksList.sort(function(a, b) {
 				return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
@@ -336,52 +385,173 @@ define(function(require){
 
 			$addressBooksListBox.empty().append(html);
 
-			$container.find('.js-select-list').on('click', function(e) {
+			$addressBooksListBox.find('.js-select-list').not('.handled').on('click', function(e) {
 				e.preventDefault();
 				var $this = $(this);
 				var id = $this.parent().data('id');
 
-				self.renderListItem(id, function(){
+				self.renderListItemForm(id, function() {
 					$('#addressbooks-list').find('li.active').removeClass('active');
 					$this.parent().addClass('active');
 				});
-			});
+			}).addClass('handled');
 		},
 
-		renderListItem: function(listId, callback) {
+		renderListItemForm: function(listId, callback) {
 			var self = this;
 			var $container = $('#addressbooks-content');
-			//var i18n = self.i18n.active(); // TODO: remove?
 
-			self.getAddressBooksListItem(listId, function(listItemData) {
+			if(listId) {
+				self.getListItem(listId, function(listItemData) {
+					var html = $(monster.template(self, 'listItemContent', {
+						data: listItemData
+					}));
+					$container.empty().append(html);
+
+					self.getEntriesOfList(listId, function(entriesList) {
+						console.log('Entries:');
+						console.log(entriesList);
+
+						self.entriesTableRender(entriesList, listId);
+						self.listItemFormBindEvents($container);
+
+						if(typeof(callback) === 'function') {
+							callback(listItemData, entriesList);
+						}
+					});
+				})
+			} else {
 				var html = $(monster.template(self, 'listItemContent', {
-					data: listItemData
+					data: {}
 				}));
 				$container.empty().append(html);
-
-				self.getEntriesOfList(listId, function(entriesList) {
-					console.log('Entries:');
-					console.log(entriesList);
-
-					self.entriesTableRender(entriesList, listId);
-					self.listItemFormBindEvents($container);
-
-					if(typeof(callback) === 'function') {
-						callback(listItemData, entriesList);
-					}
-				});
-			})
+				self.listItemFormBindEvents($container);
+				if(typeof(callback) === 'function') {
+					callback();
+				}
+			}
 		},
 
 		listItemFormBindEvents: function($container) {
-			$container.find('.js-save-list').on('click', function(e) {
+			var self = this;
+
+			$('#addressbook-list-form').find('.js-to-serialize').not('.handled').on('change paste keyup', function(){
+				$('#addressbook-list-form').find('.js-save-list').show();
+			}).addClass('handled');
+
+			$container.find('.js-create-list').not('handled').on('click', function(e) {
 				e.preventDefault();
-				// TODO!
+
+				var $listForm = $('#addressbook-list-form');
+				monster.ui.validate($listForm, {
+					rules: self.validationRules.listForm
+				});
+
+				if(!monster.ui.valid($listForm)) {
+					return;
+				}
+
+				var formData = self.getFormData($listForm);
+
+				self.createList(formData, function(listData) {
+					self.getLists(function(lists) {
+						self.renderSidebarMenu(lists, listData.id);
+						self.renderListItemForm(listData.id);
+						// TODO: show astr message
+					});
+				});
+			}).addClass('handled');
+
+			$container.find('.js-save-list').not('handled').on('click', function(e) {
+				e.preventDefault();
+
+				var listId = $(this).data('list-id');
+
+				var $listForm = $('#addressbook-list-form');
+				monster.ui.validate($listForm, {
+					rules: self.validationRules.listForm
+				});
+
+				if(!monster.ui.valid($listForm)) {
+					return;
+				}
+
+				var formData = self.getFormData($listForm);
+
+				self.updateList(listId, formData, function(listData) {
+					self.getLists(function(lists) {
+						self.renderSidebarMenu(lists, listData.id);
+						self.renderListItemForm(listData.id);
+						// TODO: show astr message
+					});
+				});
+			}).addClass('handled');
+
+			$container.find('.js-cancel-creating-list').not('handled').on('click', function(e) {
+				e.preventDefault();
+				$('#addressbooks-list').find('.js-new-list-item').remove();
+				$('#addressbooks-content').empty().html('<h2>' + self.i18n.active().addressbooks.mainContentIntroMessage + '</h2>');
+			}).addClass('handled');
+
+			$container.find('.js-delete-list').not('handled').on('click', function(e) {
+				e.preventDefault();
+				var listId = $(this).data('list-id');
+
+				monster.ui.confirm(self.i18n.active().addressbooks.deleteListConfirmText, function() {
+					self.deleteList(listId, function(data) {
+						var i18n = self.i18n.active();
+						$('#addressbooks-list').find('li[data-id="' + listId + '"]').remove();
+						$('#addressbooks-content').empty().html('<h2>' + i18n.addressbooks.mainContentIntroMessage + '</h2>');
+					})
+				});
+			}).addClass('handled');
+		},
+
+		getFormData: function($formEl, selector) {
+			if(typeof(selector) === 'undefined') {
+				selector = '.js-to-serialize[name]';
+			}
+
+			var result = {};
+			$formEl.find(selector).each(function(i, el){
+				var $el = $(el);
+				var name = $el.attr('name');
+
+				if(el.tagName === 'INPUT') {
+					if($el.attr('type') === 'checkbox') {
+						result[name] = !!$el.is(':checked');
+						return;
+					}
+
+					if(!!$el.val()) {
+						result[name] = $el.val();
+						return;
+					}
+				}
+
+				if(el.tagName === 'SELECT' && !!$el.find('option:selected').val()) {
+					result[name] = $el.find('option:selected').val();
+				}
 			});
 
-			$container.find('.js-delete-list').on('click', function(e) {
-				e.preventDefault();
-				// TODO!
+			return result;
+		},
+
+		deleteList: function(listId, callback) {
+			var self = this;
+
+			monster.request({
+				resource: 'addressbooks.list.delete',
+				data: {
+					accountId: self.accountId,
+					listId: listId,
+					generateError: false
+				},
+				success: function (data) {
+					if(typeof(callback) === 'function') {
+						callback(data.data);
+					}
+				}
 			});
 		},
 
@@ -391,7 +561,8 @@ define(function(require){
 
 			var html = $(monster.template(self, 'entries', {
 				'entries': entries,
-				'listId': listId
+				'listId': listId,
+				'entriesButtons': $(monster.template(self, 'entriesButtons', {})).html()
 			}));
 
 			$container.empty().html(html);
@@ -400,54 +571,92 @@ define(function(require){
 			self.vars.entryDataTable = $entriesTable.DataTable({
 				'bStateSave': false,
 				'lengthMenu': [[5, 25, 50, -1], [5, 25, 50, 'All']],
-				'columnDefs': [
-					{
-						'targets': 'no-sort',
-						'orderable': false
-					}
-				],
+				'columnDefs': [{
+					'targets': 'no-sort',
+					'orderable': false
+				}],
 				dom: 'lfrtipB',
 				buttons: [
 					'csvHtml5'
 				]
 			});
 
-			self.entriesTableBindEvents($entriesTable);
+			self.entriesTableBindEvents($container);
 		},
 
 		entriesTableBindEvents: function($container){
 			var self = this;
 
-			$container.find('.js-edit-entry').not('.handled').on('click', function(e){
+			$container.find('.js-create-entry').not('.handled').on('click', function(e) {
 				e.preventDefault();
-				var $el = $(this);
-				var entryId = $el.data('entry-id');
-				var listId = $el.data('list-id');
+				var listId = $(this).data('list-id');
+				self.showPopupCreateEntry(listId);
+			}).addClass('handled');
+
+			$container.find('.js-edit-entry').not('.handled').on('click', function(e) {
+				e.preventDefault();
+				var $tr = $(this).closest('tr');
+				var entryId = $tr.data('entry-id');
+				var listId = $tr.data('list-id');
 				self.showPopupEditEntry(entryId, listId);
 			}).addClass('handled');
 
-			$container.find('.js-remove-entry').not('.handled').on('click', function(e){
+			$container.find('.js-remove-entry').not('.handled').on('click', function(e) {
 				e.preventDefault();
-				var $el = $(this);
-				var entryId = $el.data('entry-id');
-				var listId = $el.data('list-id');
+				var $tr = $(this).closest('tr');
+				var entryId = $tr.data('entry-id');
+				var listId = $tr.data('list-id');
 
-				// TODO: add confirm dialog
-
-				self.vars.entryDataTable
-					.row($(this).closest('tr'))
-					.remove()
-					.draw();
-
-				// TODO: delete entry via api
-				/*self.deleteEntry(entryId, listId, function(){
-					// update table
-				});*/
+				monster.ui.confirm(self.i18n.active().addressbooks.deleteEntryConfirmText, function() {
+					self.deleteEntry(entryId, listId, function(){
+						self.vars.entryDataTable
+							.row($tr)
+							.remove()
+							.draw();
+					});
+				});
 			}).addClass('handled');
+		},
+
+		deleteEntry: function(entryId, listId, callback) {
+			var self = this;
+
+			monster.request({
+				resource: 'addressbooks.entry.delete',
+				data: {
+					accountId: self.accountId,
+					listId: listId,
+					entryId: entryId,
+					generateError: false
+				},
+				success: function (data) {
+					if(typeof(callback) === 'function') {
+						callback(data.data);
+					}
+				}
+			});
+		},
+
+		showPopupCreateEntry: function(listId, callback){
+			var self = this;
+			var i18n = self.i18n.active();
+
+			var dialogTemplate = monster.template(self, 'entryForm', {
+				entryData: {},
+				listId: listId
+			});
+
+			var $popup = monster.ui.dialog(dialogTemplate, {
+				title: i18n.addressbooks.createEntryDialogTitle,
+				dialogClass: 'addressbooks-container addressbooks-dialog'
+			});
+
+			self.entryPopupBindEvents($popup, {}, null, listId);
 		},
 
 		showPopupEditEntry: function(entryId, listId, callback){
 			var self = this;
+			var i18n = self.i18n.active();
 
 			self.getEntry(entryId, listId, function(entryData) {
 				var dialogTemplate = monster.template(self, 'entryForm', {
@@ -456,9 +665,19 @@ define(function(require){
 				});
 
 				var $popup = monster.ui.dialog(dialogTemplate, {
-					title: 'Edit Entry &laquo;' + entryData.displayname + '&raquo;', // TODO: i18n it!
+					title: i18n.addressbooks.editEntryDialogTitle.replace('${name}', entryData.displayname),
 					dialogClass: 'addressbooks-container addressbooks-dialog'
 				});
+
+				if(entryData.number) {
+					$('.js-number-switcher[value="number"]').prop('checked', true);
+					$('.js-entry-number-box').show();
+					$('.js-entry-pattern-box').hide();
+				} else if(entryData.pattern) {
+					$('.js-number-switcher[value="pattern"]').prop('checked', true);
+					$('.js-entry-number-box').hide();
+					$('.js-entry-pattern-box').show();
+				}
 
 				self.entryPopupBindEvents($popup, entryData, entryId, listId);
 			});
@@ -466,6 +685,31 @@ define(function(require){
 
 		entryPopupBindEvents: function($popup, entryData, entryId, listId) {
 			var self = this;
+
+			$('.js-number-switcher', $popup).on('change', function(e) {
+				e.preventDefault();
+				var val = $(this).val();
+
+				$('.js-entry-number-box,.js-entry-pattern-box').hide();
+				$('.js-entry-' + val + '-box').show();
+			});
+
+			$('.js-cancel', $popup).on('click', function(e) {
+				e.preventDefault();
+				$popup.dialog('close');
+			});
+
+			$('.js-save-entry', $popup).on('click', function(e) {
+				e.preventDefault();
+
+				self.saveEntryHandler($popup, entryData, entryId, listId);
+			});
+		},
+		saveEntryHandler: function($popup, entryData, entryId, listId){
+			var self = this;
+			var $entryForm = $popup.find('form');
+			var newEntryData = {};
+
 			var removeEmptyProperties = function(data) {
 				var propertiesList = [
 					'displayname',
@@ -483,29 +727,27 @@ define(function(require){
 				return data;
 			};
 
-			$('.js-cancel', $popup).click(function() {
-				e.preventDefault();
-				$popup.dialog('close');
+			monster.ui.validate($entryForm, {
+				rules: self.validationRules.entryForm
 			});
 
-			$('.js-save-entry', $popup).click(function(e) {
-				e.preventDefault();
+			if(!monster.ui.valid($entryForm)) {
+				return;
+			}
 
+			var formData = monster.ui.getFormData($entryForm[0]);
+
+			var numberOrPattern = $('.js-number-switcher:checked').val();
+			if(numberOrPattern === 'number') {
+				formData['pattern'] = '';
+			} else {
+				formData['number'] = '';
+			}
+
+			if(entryId) {
 				var $row = $('#entries-table').find('tr#' + entryId);
 				var dataTablesRow = self.vars.entryDataTable.row($row);
-
-				var $entryForm = $popup.find('form');
-
-				monster.ui.validate($entryForm, {
-					rules: self.validationRules.entryForm
-				});
-
-				if(!monster.ui.valid($entryForm)) {
-					return;
-				}
-
-				var formData = monster.ui.getFormData($entryForm[0]);
-				var newEntryData = removeEmptyProperties($.extend(true, entryData, formData));
+				newEntryData = removeEmptyProperties($.extend(true, entryData, formData));
 
 				self.updateEntry(entryId, listId, newEntryData, function(updatedEntryData){
 					var rowData = dataTablesRow.data();
@@ -523,7 +765,30 @@ define(function(require){
 
 					$popup.dialog('close');
 				});
-			});
+			} else {
+				newEntryData = removeEmptyProperties(formData);
+				self.createEntry(listId, newEntryData, function(entryData){
+					var rowNode = self.vars.entryDataTable.row.add([
+						'',
+						entryData['displayname'] || '',
+						entryData['firstname'] || '',
+						entryData['lastname'] || '',
+						entryData['number'] || '',
+						entryData['type'] || '',
+						entryData['pattern'] || '',
+						$(monster.template(self, 'entriesButtons', {})).html()
+					] ).draw(false).node();
+
+					$(rowNode).attr('id', entryData.id)
+						.data('entry-id', entryData.id)
+						.data('list-id', listId)
+						.addClass('js-item');
+
+					self.entriesTableBindEvents($(rowNode));
+
+					$popup.dialog('close');
+				});
+			}
 		}
 	};
 

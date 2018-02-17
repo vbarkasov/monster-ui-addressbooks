@@ -16,9 +16,8 @@
 			<th>{{i18n.addressbooks.entriesTable.columnHeader.name}}</th>
 			<th>{{i18n.addressbooks.entriesTable.columnHeader.firstName}}</th>
 			<th>{{i18n.addressbooks.entriesTable.columnHeader.lastName}}</th>
-			<th>{{i18n.addressbooks.entriesTable.columnHeader.number}}</th>
+			<th>{{i18n.addressbooks.entriesTable.columnHeader.numberAndPattern}}</th>
 			<th>{{i18n.addressbooks.entriesTable.columnHeader.type}}</th>
-			<th>{{i18n.addressbooks.entriesTable.columnHeader.pattern}}</th>
 			<th class="etable_actions-col no-sort">
 				{{i18n.addressbooks.entriesTable.columnHeader.actions}}
 			</th>
@@ -32,10 +31,10 @@
 			<td class="js-entry-name">{{ value.displayname }}</td>
 			<td class="js-entry-name">{{ value.firstname }}</td>
 			<td class="js-entry-name">{{ value.lastname }}</td>
-			<td class="js-entry-name">{{ value.number }}</td>
+			<td class="js-entry-name">
+				{{ value.number }} {{ value.pattern }}
+			</td>
 			<td class="js-entry-name">{{ value.type }}</td>
-			<td class="js-entry-name">{{ value.pattern }}</td>
-
 			<td class="etable_actions-col">
 				{{{ @root.entriesButtons }}}
 			</td>

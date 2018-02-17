@@ -25,9 +25,8 @@
 				"name": "Display name",
 				"firstName": "Firstname",
 				"lastName": "Lastname",
-				"number": "Phone Number",
 				"type": "Type",
-				"pattern": "Match pattern",
+				"numberAndPattern": "Number/Pattern",
 				"actions": "Actions"
 			},
 			"editBtnText": "Edit",

@@ -751,14 +751,11 @@ define(function(require){
 
 				self.updateEntry(entryId, listId, newEntryData, function(updatedEntryData){
 					var rowData = dataTablesRow.data();
-
 					rowData[1] = updatedEntryData['displayname'] || '';
 					rowData[2] = updatedEntryData['firstname'] || '';
 					rowData[3] = updatedEntryData['lastname'] || '';
-					rowData[4] = updatedEntryData['number'] || '';
+					rowData[4] = updatedEntryData['pattern'] || updatedEntryData['number'] || '';
 					rowData[5] = updatedEntryData['type'] || '';
-					rowData[6] = updatedEntryData['pattern'] || '';
-
 					dataTablesRow.data(rowData);
 					self.vars.entryDataTable.draw(false);
 					self.entriesTableBindEvents($row);
@@ -773,9 +770,8 @@ define(function(require){
 						entryData['displayname'] || '',
 						entryData['firstname'] || '',
 						entryData['lastname'] || '',
-						entryData['number'] || '',
+						entryData['number'] || entryData['pattern'] || '',
 						entryData['type'] || '',
-						entryData['pattern'] || '',
 						$(monster.template(self, 'entriesButtons', {})).html()
 					] ).draw(false).node();
 

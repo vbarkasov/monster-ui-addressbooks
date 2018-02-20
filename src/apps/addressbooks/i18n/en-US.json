@@ -17,16 +17,21 @@
 		"mainContentIntroMessage": "Select address book please",
 		"entriesTitle": "Entries",
 		"addEntryBtnText": "Add entry",
+		"importCSVBtnText": "Import CSV",
 		"importCSVbtnText": "Import CSV",
 		"editEntryDialogTitle": "Edit Entry &laquo;${name}&raquo;",
 		"createEntryDialogTitle": "Create Entry",
+		"entriesImportSuccessMessage": "The entries were imported successfully",
+		"listCreatedSuccessMessage": "The list was created successfully",
+		"listUpdatedSuccessMessage": "The list was updated successfully",
 		"entriesTable": {
 			"columnHeader": {
 				"name": "Display name",
 				"firstName": "Firstname",
 				"lastName": "Lastname",
 				"type": "Type",
-				"numberAndPattern": "Number/Pattern",
+				"number": "Number",
+				"pattern": "Pattern",
 				"actions": "Actions"
 			},
 			"editBtnText": "Edit",

@@ -1,24 +1,29 @@
 <h2>{{i18n.addressbooks.entriesTitle}}</h2>
 
-<a class="btn btn-round btn-primary create-entry-btn js-create-entry" href="" data-list-id="{{listId}}"
-	title="{{i18n.addressbooks.addEntryBtnText}}">
-	<i class="fa fa-plus"></i>
-</a>
+<div class="buttons-wrapper entry-table-top-btn-box">
+	<a class="btn btn-primary create-entry-btn js-create-entry" href="" data-list-id="{{listId}}"
+	   title="{{i18n.addressbooks.addEntryBtnText}}">
+		<i class="fa fa-plus"></i> {{i18n.addressbooks.addEntryBtnText}}
+	</a>
 
-<a class="btn js-import-csv" href="" data-list-id="{{listId}}" title="{{i18n.addressbooks.importCSVbtnText}}">
-	Import CSV
-</a>
+	<span class="btn file-upload-btn import-csv-button">
+		<input type="file" class="js-import-csv" data-list-id="{{listId}}"
+			title="{{i18n.addressbooks.importCSVbtnText}}"/>
+		{{i18n.addressbooks.importCSVBtnText}}
+	</span>
+</div>
 
 <table id="entries-table" class="entries-table">
 	<thead>
 		<tr>
-			<th class="etable_index-col">№</th>
+			<th>№</th>
 			<th>{{i18n.addressbooks.entriesTable.columnHeader.name}}</th>
 			<th>{{i18n.addressbooks.entriesTable.columnHeader.firstName}}</th>
 			<th>{{i18n.addressbooks.entriesTable.columnHeader.lastName}}</th>
-			<th>{{i18n.addressbooks.entriesTable.columnHeader.numberAndPattern}}</th>
+			<th>{{i18n.addressbooks.entriesTable.columnHeader.number}}</th>
+			<th>{{i18n.addressbooks.entriesTable.columnHeader.pattern}}</th>
 			<th>{{i18n.addressbooks.entriesTable.columnHeader.type}}</th>
-			<th class="etable_actions-col no-sort">
+			<th class="no-sort">
 				{{i18n.addressbooks.entriesTable.columnHeader.actions}}
 			</th>
 		</tr>
@@ -26,16 +31,14 @@
 	<tbody>
 	{{#each this.entries}}
 		<tr class="js-item" id="{{id}}" data-entry-id="{{id}}" data-list-id="{{@root.listId}}">
-			<td class="etable_index-col">{{inc @index}}</td>
-
-			<td class="js-entry-name">{{ value.displayname }}</td>
-			<td class="js-entry-name">{{ value.firstname }}</td>
-			<td class="js-entry-name">{{ value.lastname }}</td>
-			<td class="js-entry-name">
-				{{ value.number }} {{ value.pattern }}
-			</td>
-			<td class="js-entry-name">{{ value.type }}</td>
-			<td class="etable_actions-col">
+			<td>{{inc @index}}</td>
+			<td>{{ value.displayname }}</td>
+			<td>{{ value.firstname }}</td>
+			<td>{{ value.lastname }}</td>
+			<td>{{ value.number }}</td>
+			<td>{{ value.pattern }}</td>
+			<td>{{ value.type }}</td>
+			<td>
 				{{{ @root.entriesButtons }}}
 			</td>
 		</tr>

@@ -20,6 +20,7 @@
 	font-size: 24px;
 	margin-right: 15px;
 	cursor: pointer;
+	vertical-align: top;
 }
 
 .addressbooks-container .link-icon .fa {
@@ -41,6 +42,10 @@
 	width: 21px;
 	box-sizing: border-box;
 	padding: 3px 3px 2px 3px;
+}
+
+.addressbooks-container .btn:hover {
+	color: #333;
 }
 
 /*
@@ -138,6 +143,7 @@
 
 .addressbooks-container .buttons-wrapper .btn {
 	margin-right: 10px;
+	vertical-align: top;
 }
 
 .addressbooks-container .entries-container table {
@@ -198,11 +204,13 @@
 	font-size: 20px;
 }
 
-.addressbooks-container .entries-container .etable_index-col {
+.addressbooks-container .entries-table tr th:first-child,
+.addressbooks-container .entries-table tr td:first-child {
 	width: 30px;
 }
 
-.addressbooks-container .entries-container .etable_actions-col {
+.addressbooks-container .entries-table tr th:last-child,
+.addressbooks-container .entries-table tr td:last-child {
 	width: 100px;
 }
 
@@ -278,6 +286,10 @@
 	border: none;
 }
 
+.addressbooks-container select[name="entries-table_length"] {
+	width: 55px;
+}
+
 .addressbooks-container table .buttons-wrapper {
 	padding-top: 0;
 	padding-bottom: 0;
@@ -286,6 +298,28 @@
 .addressbooks-container table .dataTables_length select {
 	width: 60px;
 }
+
+.addressbooks-container .entry-table-top-btn-box {
+	float: right;
+	padding-top: 15px;
+	padding-bottom: 0;
+}
+
+.addressbooks-container .file-upload-btn {
+	position: relative;
+	overflow: hidden;
+	cursor: pointer;
+}
+
+.addressbooks-container .file-upload-btn input {
+	opacity: 0;
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 50px;
+	width: 200px;
+}
+
 
 /*
  * Dialog

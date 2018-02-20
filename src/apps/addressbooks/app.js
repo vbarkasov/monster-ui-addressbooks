@@ -330,6 +330,39 @@ define(function(require){
 			});
 		},
 
+
+		createEntries: function(entriesList, listId, callback) {
+			var self = this,
+				requests = {};
+
+			entriesList.forEach(function(val, i){
+				requests['entry' + i] = (function(entryData){
+					return function(callback){
+						monster.request({
+							resource: 'addressbooks.entry.create',
+							data: {
+								accountId: self.accountId,
+								listId: listId,
+								generateError: false,
+								data: entryData
+							},
+							success: function(data, status) {
+								if(typeof(callback) === 'function') {
+									callback(null, data.data);
+								}
+							}
+						});
+					}
+				})(val);
+			});
+
+			monster.parallel(requests, function(err, results){
+				if(typeof(callback) === 'function') {
+					callback(results);
+				}
+			});
+		},
+
 		updateList: function(listId, data, callback){
 			var self = this;
 
@@ -457,7 +490,7 @@ define(function(require){
 					self.getLists(function(lists) {
 						self.renderSidebarMenu(lists, listData.id);
 						self.renderListItemForm(listData.id);
-						// TODO: show astr message
+						toastr.success(self.i18n.active().addressbooks.listCreatedSuccessMessage);
 					});
 				});
 			}).addClass('handled');
@@ -482,7 +515,7 @@ define(function(require){
 					self.getLists(function(lists) {
 						self.renderSidebarMenu(lists, listData.id);
 						self.renderListItemForm(listData.id);
-						// TODO: show astr message
+						toastr.success(self.i18n.active().addressbooks.listUpdatedSuccessMessage);
 					});
 				});
 			}).addClass('handled');
@@ -577,9 +610,19 @@ define(function(require){
 				}],
 				dom: 'lfrtipB',
 				buttons: [
-					'csvHtml5'
+					{
+						extend: 'csvHtml5',
+						text: 'Export CSV',
+						exportOptions: {
+							columns: [1,2,3,4,5,6]
+						}
+					}
 				]
 			});
+
+			self.vars.entryDataTable.on('draw', function(e, settings) {
+				self.entriesTableBindEvents($(this));
+			} );
 
 			self.entriesTableBindEvents($container);
 		},
@@ -591,6 +634,21 @@ define(function(require){
 				e.preventDefault();
 				var listId = $(this).data('list-id');
 				self.showPopupCreateEntry(listId);
+			}).addClass('handled');
+
+			$container.find('.js-import-csv').not('.handled').on('change', function(e) {
+				e.preventDefault();
+				var $fileEl = $(this);
+
+				if(!$fileEl.val()) {
+					return;
+				}
+
+				var listId = $fileEl.data('list-id');
+				self.importEntriesFromCSV(e.target.files, listId, function() {
+					$fileEl.val('');
+					toastr.success(self.i18n.active().addressbooks.entriesImportSuccessMessage);
+				});
 			}).addClass('handled');
 
 			$container.find('.js-edit-entry').not('.handled').on('click', function(e) {
@@ -616,6 +674,73 @@ define(function(require){
 					});
 				});
 			}).addClass('handled');
+		},
+
+		importEntriesFromCSV: function(files, listId, callback) {
+			var self = this;
+			if(files.length === 0) {
+				return;
+			}
+
+			var reader = new FileReader();
+
+			reader.onload = function(e) {
+				console.log(e.target.result);
+				var entriesArr = self.parseEntriesCSV(e.target.result);
+
+				self.createEntries(entriesArr, listId, function(results) {
+					var entriesArr = [];
+
+					for(var i in results) if(results.hasOwnProperty(i)) {
+						entriesArr.push(results[i]);
+					}
+
+					self.addRowsToEntriesDatatable(entriesArr, listId, function(){
+						if(typeof(callback) === 'function') {
+							callback();
+						}
+					});
+				});
+			};
+
+			reader.readAsText(files[0]);
+		},
+
+		parseEntriesCSV: function(csv) {
+			var lines=csv.split("\n"),
+				result = [],
+				lineValues,
+				entry,
+				self = this;
+
+			var removeStartAndEndQuotes = function(text) {
+				text = $.trim(text);
+
+				if(text.charAt(0) === '"') {
+					text = text.substr(1);
+				}
+
+				if(text.charAt(text.length-1) === '"') {
+					text = text.slice(0, -1);
+				}
+				return text;
+			};
+
+			// miss headers
+			for(var i=1, len=lines.length; i<len; i++) {
+				lineValues=lines[i].split(',');
+				entry = {
+					'displayname': removeStartAndEndQuotes(lineValues[0]) || '',
+					'firstname': removeStartAndEndQuotes(lineValues[1]) || '',
+					'lastname': removeStartAndEndQuotes(lineValues[2]) || '',
+					'number': removeStartAndEndQuotes(lineValues[3]) || '',
+					'pattern': removeStartAndEndQuotes(lineValues[4]) || '',
+					'type': removeStartAndEndQuotes(lineValues[5]) || ''
+				};
+
+				result.push(self.removeEmptyEntryProperties(entry));
+			}
+			return result;
 		},
 
 		deleteEntry: function(entryId, listId, callback) {
@@ -705,27 +830,28 @@ define(function(require){
 				self.saveEntryHandler($popup, entryData, entryId, listId);
 			});
 		},
+
+		removeEmptyEntryProperties: function(data) {
+			var propertiesList = [
+				'displayname',
+				'firstname',
+				'lastname',
+				'number',
+				'pattern',
+				'type'
+			];
+			for(var i=0, len=propertiesList.length; i<len; i++) {
+				if(!data[propertiesList[i]]) {
+					delete data[propertiesList[i]];
+				}
+			}
+			return data;
+		},
+
 		saveEntryHandler: function($popup, entryData, entryId, listId){
 			var self = this;
 			var $entryForm = $popup.find('form');
 			var newEntryData = {};
-
-			var removeEmptyProperties = function(data) {
-				var propertiesList = [
-					'displayname',
-					'firstname',
-					'lastname',
-					'number',
-					'type',
-					'pattern'
-				];
-				for(var i=0, len=propertiesList.length; i<len; i++) {
-					if(!data[propertiesList[i]]) {
-						delete data[propertiesList[i]];
-					}
-				}
-				return data;
-			};
 
 			monster.ui.validate($entryForm, {
 				rules: self.validationRules.entryForm
@@ -745,46 +871,62 @@ define(function(require){
 			}
 
 			if(entryId) {
-				var $row = $('#entries-table').find('tr#' + entryId);
-				var dataTablesRow = self.vars.entryDataTable.row($row);
-				newEntryData = removeEmptyProperties($.extend(true, entryData, formData));
-
+				newEntryData = self.removeEmptyEntryProperties($.extend(true, entryData, formData));
 				self.updateEntry(entryId, listId, newEntryData, function(updatedEntryData){
-					var rowData = dataTablesRow.data();
-					rowData[1] = updatedEntryData['displayname'] || '';
-					rowData[2] = updatedEntryData['firstname'] || '';
-					rowData[3] = updatedEntryData['lastname'] || '';
-					rowData[4] = updatedEntryData['pattern'] || updatedEntryData['number'] || '';
-					rowData[5] = updatedEntryData['type'] || '';
-					dataTablesRow.data(rowData);
-					self.vars.entryDataTable.draw(false);
-					self.entriesTableBindEvents($row);
-
+					self.updateEntryDatatableRow(entryId, updatedEntryData);
 					$popup.dialog('close');
 				});
 			} else {
-				newEntryData = removeEmptyProperties(formData);
+				newEntryData = self.removeEmptyEntryProperties(formData);
 				self.createEntry(listId, newEntryData, function(entryData){
+					self.addRowsToEntriesDatatable([entryData], listId);
+					$popup.dialog('close');
+				});
+			}
+		},
+		addRowsToEntriesDatatable: function(entriesDataArr, listId, callback) {
+			var self = this;
+			var buttonsHtml = $(monster.template(self, 'entriesButtons', {})).html();
+			var $entriesTable = $('#entries-table');
+
+			entriesDataArr.forEach(function(val, i){
+				(function(entryData){
 					var rowNode = self.vars.entryDataTable.row.add([
 						'',
 						entryData['displayname'] || '',
 						entryData['firstname'] || '',
 						entryData['lastname'] || '',
-						entryData['number'] || entryData['pattern'] || '',
+						entryData['number'] || '',
+						entryData['pattern'] || '',
 						entryData['type'] || '',
-						$(monster.template(self, 'entriesButtons', {})).html()
+						buttonsHtml
 					] ).draw(false).node();
 
 					$(rowNode).attr('id', entryData.id)
 						.data('entry-id', entryData.id)
 						.data('list-id', listId)
 						.addClass('js-item');
+				})(val);
+			});
 
-					self.entriesTableBindEvents($(rowNode));
-
-					$popup.dialog('close');
-				});
+			if(typeof(callback) === 'function') {
+				callback();
 			}
+		},
+		updateEntryDatatableRow: function(entryId, entryData){
+			var self = this;
+			var $row = $('#entries-table').find('tr#' + entryId);
+			var dataTablesRow = self.vars.entryDataTable.row($row);
+
+			var rowData = dataTablesRow.data();
+			rowData[1] = entryData['displayname'] || '';
+			rowData[2] = entryData['firstname'] || '';
+			rowData[3] = entryData['lastname'] || '';
+			rowData[4] =entryData['number'] || '';
+			rowData[5] = entryData['pattern'] || '';
+			rowData[6] = entryData['type'] || '';
+			dataTablesRow.data(rowData);
+			self.vars.entryDataTable.draw(false);
 		}
 	};
 

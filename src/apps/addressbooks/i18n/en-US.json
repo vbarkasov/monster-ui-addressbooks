@@ -35,7 +35,8 @@
 				"actions": "Actions"
 			},
 			"editBtnText": "Edit",
-			"deleteBtnText": "Delete"
+			"deleteBtnText": "Delete",
+			"getVcardBtnText": "Get vCard"
 		},
 		"deleteEntryConfirmText": "Are you sure you want to delete this entry?",
 		"entryForm": {

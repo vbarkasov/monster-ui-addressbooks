@@ -1,4 +1,5 @@
 @import url('../../../css/vendor/jquery/jquery.dataTables.css');
+@import url('font-awesome/css/font-awesome.min.css');
 
 .addressbooks-container h1 {
 	font-size: 25px;
@@ -211,7 +212,8 @@
 
 .addressbooks-container .entries-table tr th:last-child,
 .addressbooks-container .entries-table tr td:last-child {
-	width: 100px;
+	width: 130px;
+	min-width: 120px;
 }
 
 .addressbooks-container .dataTables_wrapper .dataTables_filter input {

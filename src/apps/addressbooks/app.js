@@ -275,6 +275,33 @@ define(function(require){
 			});
 		},
 
+		getVcard: function(entryId, listId, callback) {
+			var self = this;
+
+			var getRandomStr = function(){
+				return Math.random().toString(36).substring(7);
+			};
+
+			var xmlhttp = new XMLHttpRequest;
+			var url = self.apiUrl + 'accounts/' + self.accountId + '/lists/' + listId + '/entries/' + entryId
+				+ '/vcard?auth_token=' + monster.util.getAuthToken() + '&_=' + getRandomStr();
+			xmlhttp.open('GET', url, true);
+			xmlhttp.onreadystatechange = function() {
+				if (4 === xmlhttp.readyState) {
+					if (200 === xmlhttp.status) {
+						if(typeof(callback) === 'function') {
+							callback(xmlhttp.responseText);
+						}
+					} else {
+						if(typeof(callback) === 'function') {
+							callback(null);
+						}
+					}
+				}
+			};
+			xmlhttp.send();
+		},
+
 		getEntriesOfList: function(listId, callback){
 			var self = this;
 
@@ -674,6 +701,18 @@ define(function(require){
 					});
 				});
 			}).addClass('handled');
+
+			$container.find('.js-get-vcard').not('.handled').on('click', function(e) {
+				e.preventDefault();
+				var $tr = $(this).closest('tr');
+				var entryId = $tr.data('entry-id');
+				var listId = $tr.data('list-id');
+				var fileName = 'vCard_' + ($tr.find('td:nth-child(2)').text()).replace(/\s/g, '-') + '.vcf';
+
+				self.getVcard(entryId, listId, function(vcardData){
+					self.downloadFile(fileName, vcardData)
+				});
+			}).addClass('handled');
 		},
 
 		importEntriesFromCSV: function(files, listId, callback) {
@@ -704,6 +743,16 @@ define(function(require){
 			};
 
 			reader.readAsText(files[0]);
+		},
+
+		downloadFile: function(fileName, text) {
+			var element = document.createElement('a');
+			element.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(text);
+			element.download = fileName;
+			element.style.display = 'none';
+			document.body.appendChild(element);
+			element.click();
+			document.body.removeChild(element);
 		},
 
 		parseEntriesCSV: function(csv) {

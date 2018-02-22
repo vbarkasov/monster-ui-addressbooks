@@ -73,6 +73,10 @@ define(function(require){
 				'verb': 'POST',
 				'url': 'accounts/{accountId}/lists/{listId}/entries/{entryId}'
 			},
+			/*'addressbooks.entry.getPhoto': {
+				'verb': 'GET',
+				'url': 'accounts/{accountId}/lists/{listId}/entries/{entryId}/photo'
+			},*/
 			'addressbooks.entry.addPhoto': {
 				'verb': 'POST',
 				'url': 'accounts/{accountId}/lists/{listId}/entries/{entryId}/photo'
@@ -301,6 +305,94 @@ define(function(require){
 			};
 			xmlhttp.send();
 		},
+
+		/*getPhoto: function(entryId, listId, callback) {
+			var self = this;
+
+			var getRandomStr = function(){
+				return Math.random().toString(36).substring(7);
+			};
+
+			var xmlhttp = new XMLHttpRequest;
+			var url = self.apiUrl + 'accounts/' + self.accountId + '/lists/' + listId + '/entries/' + entryId
+				+ '/photo?auth_token=' + monster.util.getAuthToken() + '&_=' + getRandomStr();
+			xmlhttp.open('GET', url, true);
+			xmlhttp.onreadystatechange = function() {
+				if (4 === xmlhttp.readyState) {
+					if (200 === xmlhttp.status) {
+						if(typeof(callback) === 'function') {
+							callback(xmlhttp.responseText);
+						}
+					} else {
+						if(typeof(callback) === 'function') {
+							callback(null);
+						}
+					}
+				}
+			};
+			xmlhttp.send();
+		},
+
+		showPhotoPopup: function(entryId, listId, callback) {
+			var self = this;
+			var i18n = self.i18n.active();
+
+			var dialogTemplate = monster.template(self, 'photo', {
+				entryId: entryId,
+				listId: listId
+			});
+
+			var $popup = monster.ui.dialog(dialogTemplate, {
+				title: i18n.addressbooks.editPhotoDialogTitle,
+				dialogClass: 'addressbooks-container addressbooks-dialog'
+			});
+
+			self.photoPopupBindEvents($popup);
+		},
+
+		photoPopupBindEvents: function($container){
+			var self = this;
+
+			$container.find('.js-upload-photo').not('.handled').on('change', function(e) {
+				e.preventDefault();
+				var $fileEl = $(this);
+
+				if(!$fileEl.val()) {
+					return;
+				}
+
+				var listId = $fileEl.data('list-id');
+				var entryId = $fileEl.data('entry-id');
+
+				var blobFile = $fileEl[0].files[0];
+				var formData = new FormData();
+				formData.append('fileToUpload', blobFile);
+
+				self.addPhoto(formData, entryId, listId, function(data) {
+					$fileEl.val('');
+					toastr.success('self.i18n.active().addressbooks.changePhotoSuccessMessage');
+				});
+			}).addClass('handled');
+		},
+
+		addPhoto: function(photo, entryId, listId, callback) {
+			var self = this;
+
+			monster.request({
+				resource : 'addressbooks.entry.addPhoto',
+				data : {
+					accountId : self.accountId,
+					listId: listId,
+					entryId: entryId,
+					data : photo
+				},
+				success : function(data) {
+					if(typeof(callback) === 'function') {
+						callback(data);
+					}
+				}
+			});
+		},*/
 
 		getEntriesOfList: function(listId, callback){
 			var self = this;
@@ -565,6 +657,19 @@ define(function(require){
 					})
 				});
 			}).addClass('handled');
+
+			$container.find('.js-delete-all-entries').not('handled').on('click', function(e) {
+				e.preventDefault();
+				var listId = $(this).data('list-id');
+
+				monster.ui.confirm(self.i18n.active().addressbooks.deleteAllEntriesConfirmText, function() {
+					self.deleteAllEntries(listId, function(data) {
+						var i18n = self.i18n.active();
+						self.entriesTableRender([], listId);
+						toastr.success(self.i18n.active().addressbooks.allEntriesWereDeletedSuccessMessage);
+					});
+				});
+			}).addClass('handled');
 		},
 
 		getFormData: function($formEl, selector) {
@@ -713,6 +818,20 @@ define(function(require){
 					self.downloadFile(fileName, vcardData)
 				});
 			}).addClass('handled');
+
+			/*$container.find('.js-edit-photo').not('.handled').on('click', function(e) {
+				e.preventDefault();
+
+				var $tr = $(this).closest('tr');
+				var entryId = $tr.data('entry-id');
+				var listId = $tr.data('list-id');
+				self.getPhoto(entryId, listId, function(photo) {
+					self.showPhotoPopup(entryId, listId, function() {
+					});
+				})
+			}).addClass('handled');*/
+
+
 		},
 
 		importEntriesFromCSV: function(files, listId, callback) {
@@ -801,6 +920,24 @@ define(function(require){
 					accountId: self.accountId,
 					listId: listId,
 					entryId: entryId,
+					generateError: false
+				},
+				success: function (data) {
+					if(typeof(callback) === 'function') {
+						callback(data.data);
+					}
+				}
+			});
+		},
+
+		deleteAllEntries: function(listId, callback) {
+			var self = this;
+
+			monster.request({
+				resource: 'addressbooks.list.deleteAllEntries',
+				data: {
+					accountId: self.accountId,
+					listId: listId,
 					generateError: false
 				},
 				success: function (data) {

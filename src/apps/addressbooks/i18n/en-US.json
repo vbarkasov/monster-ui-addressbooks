@@ -12,16 +12,19 @@
 		"saveListItemButtonText": "Save",
 		"deleteListItemButtonText": "Delete",
 		"createListItemButtonText": "Create",
+		"deleteAllEntriesButtonText": "Delete all entries",
 		"cancelCreatingListItemButtonText": "Cancel",
 		"deleteListConfirmText": "Are you sure you want to delete this list?",
 		"mainContentIntroMessage": "Select address book please",
 		"entriesTitle": "Entries",
 		"addEntryBtnText": "Add entry",
 		"importCSVBtnText": "Import CSV",
-		"importCSVbtnText": "Import CSV",
+		"uploadPhotoBtnText": "Upload photo",
+		"editPhotoDialogTitle": "Edit photo",
 		"editEntryDialogTitle": "Edit Entry &laquo;${name}&raquo;",
 		"createEntryDialogTitle": "Create Entry",
 		"entriesImportSuccessMessage": "The entries were imported successfully",
+		"allEntriesWereDeletedSuccessMessage": "All entries in current list were deleted successfully",
 		"listCreatedSuccessMessage": "The list was created successfully",
 		"listUpdatedSuccessMessage": "The list was updated successfully",
 		"entriesTable": {
@@ -36,9 +39,11 @@
 			},
 			"editBtnText": "Edit",
 			"deleteBtnText": "Delete",
-			"getVcardBtnText": "Get vCard"
+			"getVcardBtnText": "Get vCard",
+			"editPhotoBtnText": "Edit photo"
 		},
 		"deleteEntryConfirmText": "Are you sure you want to delete this entry?",
+		"deleteAllEntriesConfirmText": "Are you sure you want to delete all entries in current list?",
 		"entryForm": {
 			"displaynameLabel": "Display Name",
 			"firstnameLabel": "Firstname",

@@ -145,6 +145,7 @@
 .addressbooks-container .buttons-wrapper .btn {
 	margin-right: 10px;
 	vertical-align: top;
+	margin-bottom: 7px;
 }
 
 .addressbooks-container .entries-container table {
@@ -305,6 +306,7 @@
 	float: right;
 	padding-top: 15px;
 	padding-bottom: 0;
+	margin-bottom: 15px;
 }
 
 .addressbooks-container .file-upload-btn {
@@ -355,6 +357,17 @@
 	margin-left: 15px;
 }
 
+@media (max-width: 640px) {
+	.dataTables_wrapper .dataTables_length,
+	.dataTables_wrapper .dataTables_filter {
+		text-align: left;
+	}
+
+	.addressbooks-container .dataTables_wrapper .dt-buttons {
+		margin-top: 15px;
+	}
+}
+
 @media (max-width: 767px) {
 	.addressbooks-container .sidebar-list-panel.well {
 		max-width: none;
@@ -362,6 +375,10 @@
 
 	.addressbooks-container .sidebar-list-panel__header > .btn-round {
 		position: static;
+	}
+
+	.addressbooks-container .dataTables_wrapper .dt-buttons {
+		padding: 0;
 	}
 }
 

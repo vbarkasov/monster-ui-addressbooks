@@ -4,17 +4,18 @@
 		"en-US": {
 			"label": "Address Books",
 			"description": "The Address Books App allows you manage your entries.",
-			"extended_description": "The Address Books App allows you manage your entries.",
+			"extended_description": "The Address Books App allows you to conveniently manage address books, entries. You can add, import and export entries.",
+			
 			"features": [
-				"Manage Address Books",
-				"Manage Entries"
+				"Manage address books",
+				"Manage entries"
 			]
 		}
 	},
 	"tags": [],
 	"icon": "addressbooks_app.png",
 	"api_url": "",
-	"author": "Telux",
+	"author": "Vladimir Barkasov",
 	"version": "1.0",
 	"license": "-",
 	"price": 0,

@@ -12,12 +12,12 @@
 			]
 		}
 	},
-	"tags": [],
+	"tags": ["reseller"],
 	"icon": "addressbooks_app.png",
 	"api_url": "",
-	"author": "Vladimir Barkasov",
+	"author": "Vladimir Barkasov, sponsored by Raffel Internet B.V.",
 	"version": "1.0",
-	"license": "-",
+	"license": "MPL2",
 	"price": 0,
 	"screenshots": [
 		"screen001.png"

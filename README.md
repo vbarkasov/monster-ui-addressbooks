@@ -29,7 +29,7 @@ ln -s js/vendor/datatables/dataTables.buttons.min.js datatables.net-buttons.js
 ln -s js/vendor/datatables/buttons.html5.min.js datatables.net-buttons-html5.js
 ln -s js/vendor/datatables/buttons.bootstrap.min.js datatables.net-buttons-bootstrap.js
 ```
-3. Register `addressbooks` app as `sup crossbar_maintenance init_app ABSOLUTE_PATH_TO_ADDRESSBOOKS_APP https://YOUR_SITE:PORT/v2/`
+3. Register `addressbooks` app
 ```bash
 #sup crossbar_maintenance init_app <absolute path to addressbooks app> <your api base url>
 sup crossbar_maintenance init_app /var/www/html/monster-ui/dist/apps/addressbooks https://site.com:8443/v2/ 

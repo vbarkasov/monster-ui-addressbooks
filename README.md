@@ -36,5 +36,22 @@ sup crossbar_maintenance init_app /var/www/html/monster-ui/dist/apps/addressbook
 ```
 4. Activate AddressBooks app in the Monster UI App Store ( `/#/apps/appstore` )
 
+#### Default address book
+Default address book is list of entries, which will be create automatically.  
+The user will not be able to change the default list name and to delete it through the application interface in this case.  
+If you want set default address book (list), you should add to `js/config.js` specific parameters as next:
+``` javascript
+define(function(require) {
+	return {
+		addressbooksapp: {
+			create_default_addressbook: true,
+			default_addressbook_name: "Default list"
+		}
+```
+
+Parameter | Value Type | Default value | Is required
+--- | --- | --- | --- 
+**create_default_addressbook** | boolean | false | No
+**default_addressbook_name** | string | "default_addressbook" | No
 
 

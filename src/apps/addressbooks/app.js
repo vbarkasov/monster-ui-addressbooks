@@ -88,7 +88,8 @@ define(function(require){
 		},
 
 		vars: {
-			entryDataTable: null
+			entryDataTable: null,
+			defaultAddressbookName: 'default_addressbook'
 		},
 
 		validationRules: {
@@ -148,6 +149,15 @@ define(function(require){
 			});
 
 			self.initHandlebarsHelpers();
+			self.initValidationHelpers();
+		},
+
+		initValidationHelpers: function(){
+			var self = this;
+
+			jQuery.validator.addMethod('notEqual', function(value, element, param) {
+				return this.optional(element) || value != param;
+			}, self.i18n.active().addressbooks.validationMessage.specifyDifferentValue);
 		},
 
 		initHandlebarsHelpers: function() {
@@ -204,9 +214,52 @@ define(function(require){
 
 			self.getLists(function(addressBooksList) {
 				self.renderSidebarMenu(addressBooksList);
+				self.initDefaultListBehavior(addressBooksList);
 			});
 
 			self.mainContainerBindEvents($container);
+		},
+
+		initDefaultListBehavior: function(addressBooksList) {
+			var self = this;
+			var config = monster.config;
+
+			var isSetDefaultName = function() {
+				return config.addressbooksapp.hasOwnProperty('default_addressbook_name')
+					&& !!config.addressbooksapp['default_addressbook_name']
+			};
+
+			var shouldBeCreatedDefaultList = function() {
+				return config.addressbooksapp
+				&& config.addressbooksapp.hasOwnProperty('create_default_addressbook')
+			};
+
+			var isExistDefaultList = function(defaultListName){
+				for(var i=0, len=addressBooksList.length; i<len; i++) {
+					if(addressBooksList[i].name === defaultListName) {
+						return true;
+					}
+				}
+				return false;
+			};
+
+			if(shouldBeCreatedDefaultList()) {
+				if(isSetDefaultName()) {
+					self.vars.defaultAddressbookName = config.addressbooksapp['default_addressbook_name'];
+				}
+
+				if(!isExistDefaultList(self.vars.defaultAddressbookName)) {
+					self.createList({
+						name: self.vars.defaultAddressbookName
+					}, function(defaultListData){
+						self.getLists(function(lists) {
+							self.renderSidebarMenu(lists, defaultListData.id);
+							self.renderListItemForm(defaultListData.id);
+							toastr.success(self.i18n.active().addressbooks.defaultListCreatedSuccessMessage);
+						});
+					});
+				}
+			}
 		},
 
 		mainContainerBindEvents: function ($container) {
@@ -553,10 +606,30 @@ define(function(require){
 			var self = this;
 			var $container = $('#addressbooks-content');
 
+			var isDefaultAddressBook = function(listName) {
+				var config = monster.config;
+				var defaultAddressBookName = self.vars.defaultAddressbookName;
+
+				if(config.addressbooksapp
+					&& config.addressbooksapp.hasOwnProperty('create_default_addressbook')
+					&& config.addressbooksapp['create_default_addressbook']) {
+
+					if(config.addressbooksapp.hasOwnProperty('default_addressbook_name')
+						&& !!config.addressbooksapp['default_addressbook_name']) {
+						defaultAddressBookName = config.addressbooksapp['default_addressbook_name'];
+					}
+					return (defaultAddressBookName === listName);
+				}
+
+				return false;
+			};
+
+
 			if(listId) {
 				self.getListItem(listId, function(listItemData) {
 					var html = $(monster.template(self, 'listItemContent', {
-						data: listItemData
+						data: listItemData,
+						isDefaultAddressBook: isDefaultAddressBook(listItemData.name)
 					}));
 					$container.empty().append(html);
 
@@ -574,7 +647,9 @@ define(function(require){
 				})
 			} else {
 				var html = $(monster.template(self, 'listItemContent', {
-					data: {}
+					data: {
+						isDefaultAddressBook: false
+					}
 				}));
 				$container.empty().append(html);
 				self.listItemFormBindEvents($container);
@@ -595,6 +670,8 @@ define(function(require){
 				e.preventDefault();
 
 				var $listForm = $('#addressbook-list-form');
+
+				self.validationRules.listForm.name.notEqual = self.vars.defaultAddressbookName;
 				monster.ui.validate($listForm, {
 					rules: self.validationRules.listForm
 				});

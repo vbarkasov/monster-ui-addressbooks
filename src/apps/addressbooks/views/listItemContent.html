@@ -8,7 +8,8 @@
 	<div class="control-group">
 		<label class="control-label" for="list-item-name">{{ @root.i18n.addressbooks.listItemNameLabel }}</label>
 		<div class="controls">
-			<input class="js-to-serialize" type="text" value="{{ data.name }}" name="name" id="list-item-name" />
+			<input class="js-to-serialize" type="text" value="{{ data.name }}" name="name" id="list-item-name"
+				{{#if isDefaultAddressBook }}readonly{{/if}} />
 		</div>
 	</div>
 
@@ -36,9 +37,11 @@
 			<button class="btn btn-primary js-save-list" data-list-id="{{ data.id }}" style="display: none;">
 				{{ i18n.addressbooks.saveListItemButtonText }}
 			</button>
-			<button class="btn btn-danger js-delete-list" data-list-id="{{ data.id }}">
-				{{ i18n.addressbooks.deleteListItemButtonText }}
-			</button>
+			{{#unless isDefaultAddressBook }}
+				<button class="btn btn-danger js-delete-list" data-list-id="{{ data.id }}">
+					{{ i18n.addressbooks.deleteListItemButtonText }}
+				</button>
+			{{/unless}}
 			<button class="btn btn-danger js-delete-all-entries" data-list-id="{{ data.id }}">
 				{{ i18n.addressbooks.deleteAllEntriesButtonText }}
 			</button>

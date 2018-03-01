@@ -23,9 +23,13 @@
 		"editPhotoDialogTitle": "Edit photo",
 		"editEntryDialogTitle": "Edit Entry &laquo;${name}&raquo;",
 		"createEntryDialogTitle": "Create Entry",
+		"validationMessage": {
+			"specifyDifferentValue": "Please specify a different (non-default) value"
+		},
 		"entriesImportSuccessMessage": "The entries were imported successfully",
 		"allEntriesWereDeletedSuccessMessage": "All entries in current list were deleted successfully",
 		"listCreatedSuccessMessage": "The list was created successfully",
+		"defaultListCreatedSuccessMessage": "The default list was created successfully",
 		"listUpdatedSuccessMessage": "The list was updated successfully",
 		"entriesTable": {
 			"columnHeader": {
